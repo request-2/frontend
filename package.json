@@ -20,7 +20,7 @@
     "history": "^5.0.0",
     "jsonschema": "^1.2.6",
     "moment": "^2.27.0",
-    "postcss": "^7",
+    "postcss": "^8",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-epic-spinners": "^0.4.1",
