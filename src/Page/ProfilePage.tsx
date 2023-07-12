@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { LogOut } from 'react-feather';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -76,7 +76,7 @@ export function ProfilePage({ user }: { user: WithID<UserDetails> }): JSX.Elemen
   const navigate = useNavigate();
   const { authPost, auth } = useAuth();
   const { authPut } = useAuth<UserEdit>();
-  const { register, errors, handleSubmit } = useForm<UserEdit>({
+  const { register, formState:{errors}, handleSubmit } = useForm<UserEdit>({
     defaultValues: {
       name: user.name,
       telephone: user.telephone,
@@ -116,7 +116,6 @@ export function ProfilePage({ user }: { user: WithID<UserDetails> }): JSX.Elemen
                   <div>
                     <Question showIcons={false}>E-mail address</Question>
                     <ShortTextInput
-                      name="email"
                       disabled
                       defaultValue={user.email}
                       autoComplete="username"
@@ -128,18 +127,16 @@ export function ProfilePage({ user }: { user: WithID<UserDetails> }): JSX.Elemen
                   <div>
                     <Question required>Display name</Question>
                     <ShortTextInput
-                      name="name"
                       autoComplete="name"
                       errors={errors}
-                      reg={register(reqRule())}
+                      {...register("name", reqRule())}
                     />
                   </div>
                   <div>
                     <Question required>Telephone number</Question>
                     <ShortTextInput
-                      name="telephone"
                       placeholder="163"
-                      reg={register(reqRule())}
+                      {...register("telephone", reqRule())}
                       errors={errors}
                     />
                     <Description>
@@ -149,9 +146,8 @@ export function ProfilePage({ user }: { user: WithID<UserDetails> }): JSX.Elemen
                   <div>
                     <Question required>Room</Question>
                     <ShortTextInput
-                      name="room"
                       placeholder="A 1.89"
-                      reg={register(reqRule())}
+                      {...register("room", reqRule())}
                       errors={errors}
                     />
                     <Description>
@@ -174,7 +170,7 @@ export function ProfilePage({ user }: { user: WithID<UserDetails> }): JSX.Elemen
 }
 
 function PasswordSection() {
-  const { register, errors, watch, handleSubmit } = useForm<{
+  const { register, formState:{errors}, watch, handleSubmit } = useForm<{
     newPassword: string;
     password: string;
     passwordCheck: string;
@@ -210,30 +206,27 @@ function PasswordSection() {
           <div>
             <Question required>Old password</Question>
             <ShortTextInput
-              name="password"
               type="password"
               autoComplete="current-password"
               errors={errors}
-              reg={register(reqRule())}
+              {...register("password", reqRule())}
             />
           </div>
           <div>
             <Question required>Enter the new password</Question>
             <ShortTextInput
-              name="newPassword"
               errors={errors}
               autoComplete="new-password"
-              reg={register(reqRule())}
+              {...register("newPassword", reqRule())}
               type="password"
             />
           </div>
           <div>
             <Question required>Repeat the new password</Question>
             <ShortTextInput
-              name="newPasswordCheck"
               autoComplete="new-password"
               errors={errors}
-              reg={register(reqRule())}
+              {...register("passwordCheck", reqRule())}
               type="password"
             />
           </div>

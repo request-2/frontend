@@ -50,7 +50,7 @@ export function LoginPage(): JSX.Element {
   const [loginFailed, setLoginFailed] = useState(false);
   const dispatch = useAuthDispatch();
 
-  const { register, errors, watch, handleSubmit } = useForm<LoginStub>({
+  const { register, formState:{errors}, watch, handleSubmit } = useForm<LoginStub>({
     defaultValues: {
       email: '',
       password: '',
@@ -82,9 +82,8 @@ export function LoginPage(): JSX.Element {
             ) : null}
             <Question required="You have to enter an email address">E-mail address</Question>
             <ShortTextInput
-              name="email"
               autoComplete="username"
-              reg={register(reqRule())}
+              {...register("email", reqRule())}
               errors={errors}
             />
           </div>
@@ -92,9 +91,8 @@ export function LoginPage(): JSX.Element {
             <Question required="You have to enter a password">Password</Question>
             <ShortTextInput
               autoComplete="current-password"
-              name="password"
               type="password"
-              reg={register(reqRule())}
+              {...register("password", reqRule())}
               errors={errors}
             />
             <div>

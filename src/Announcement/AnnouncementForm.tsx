@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
@@ -23,7 +23,7 @@ export function AnnouncementForm({
   children: ReactNode;
 }): JSX.Element {
   const navigate = useNavigate();
-  const { register, errors, handleSubmit, watch } = useForm({
+  const { register, formState:{errors}, handleSubmit, watch } = useForm({
     defaultValues: { title: ann?.title ?? '', body: ann?.body ?? '' },
   });
   const body = watch('body');
@@ -42,14 +42,13 @@ export function AnnouncementForm({
               <div className="p-6 space-y-6 w-full flex flex-col h-full">
                 <div>
                   <Question required>The title of the announcement</Question>
-                  <ShortTextInput name="title" reg={register(reqRule())} errors={errors} />
+                  <ShortTextInput {...register('title', reqRule())} errors={errors} />
                 </div>
                 <div className="flex flex-col h-full">
                   <Question required>The announcement itself</Question>
                   <div className="h-full w-full">
                     <LongTextInput
-                      name="body"
-                      reg={register(reqRule())}
+                      {...register('body', reqRule())}
                       className="font-mono h-full"
                       errors={errors}
                       placeholder="The first paragraph will serve as a preview in the list of Announcements..."

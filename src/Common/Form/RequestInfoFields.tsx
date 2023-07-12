@@ -1,3 +1,4 @@
+import React from 'react';
 import { useAuth } from '../../Utils/Auth';
 import { comparing } from '../../Utils/Func';
 import { Option, SingleChoice } from './NewChoiceField';

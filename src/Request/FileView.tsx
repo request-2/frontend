@@ -1,3 +1,4 @@
+import React from 'react';
 import c from 'classnames';
 import { File } from 'react-feather';
 

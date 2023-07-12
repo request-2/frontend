@@ -105,7 +105,7 @@ function FormComponent({
     password: undefined,
   };
 
-  const { register, handleSubmit, control, errors, watch } = useForm<UserFormFields>({
+  const { register, handleSubmit, control, formState:{errors}, watch } = useForm<UserFormFields>({
     defaultValues,
   });
   return (
@@ -128,39 +128,35 @@ function FormComponent({
           <div>
             <Question required>Name</Question>
             <ShortTextInput
-              name="name"
               autoComplete="off"
               errors={errors}
-              reg={register(reqRule())}
+              {...register("name", reqRule())}
             />
           </div>
           <div>
             <Question required>E-mail address</Question>
             <ShortTextInput
-              name="email"
               errors={errors}
               autoComplete="off"
-              reg={register(reqRule())}
+              {...register("email", reqRule())}
             />
           </div>
           <div>
             <Question required>Telephone number</Question>
             <ShortTextInput
-              name="telephone"
               placeholder="163"
-              reg={register(reqRule())}
+              {...register("telephone", reqRule())}
               errors={errors}
             />
             <Description>
-              Input either the IOCB telehpone number, or if need be your mobile number
+              Input either the IOCB telephone number, or if need be your mobile number
             </Description>
           </div>
           <div>
             <Question required>Room</Question>
             <ShortTextInput
-              name="room"
               placeholder="A 1.89"
-              reg={register(reqRule())}
+              {...register("room", reqRule())}
               errors={errors}
             />
             <Description>The pattern is '[building code] [floor number].[door number]'</Description>
@@ -169,11 +165,10 @@ function FormComponent({
             <div>
               <Question required>Password</Question>
               <ShortTextInput
-                name="password"
                 type="password"
                 autoComplete="section-admin new-password"
                 errors={errors}
-                reg={register(reqRule())}
+                {...register("password", reqRule())}
               />
             </div>
           )}

@@ -1,5 +1,4 @@
 import c from 'classnames';
-import { ClassValue } from 'classnames/types';
 import { To } from 'history';
 import React, { ReactNode } from 'react';
 import { AtomSpinner } from 'react-epic-spinners';
@@ -7,6 +6,13 @@ import { AlertTriangle, Check } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 
 type Status = 'Normal' | 'Danger';
+
+/* this dissapeared from classnames */
+//type ClassValue = string | number | ClassDictionary | ClassArray | undefined | null | false;
+//export interface ClassDictionary {
+	//[id: string]: boolean | undefined | null;
+//}
+//export interface ClassArray extends Array<ClassValue> { } // tslint:disable-line no-empty-interface
 
 type BaseButtonParams =
   | { title: string; children?: ReactNode; className?: string }
@@ -23,7 +29,7 @@ type SubmitButtonParams =
   | (BaseButtonParams & { type: 'submit' | 'reset'; onClick?: undefined; status?: Status })
   | (ButtonParams & { type?: 'button' });
 
-export function primaryClasses(status: Status): ClassValue[] {
+export function primaryClasses(status: Status): c.Value[] {
   return [
     'rounded-lg',
     'text-white',
@@ -33,7 +39,7 @@ export function primaryClasses(status: Status): ClassValue[] {
   ];
 }
 
-export function secondaryClasses(status: Status): ClassValue[] {
+export function secondaryClasses(status: Status): c.Value[] {
   return [
     'rounded-lg',
     'bg-white',
@@ -48,7 +54,7 @@ export function secondaryClasses(status: Status): ClassValue[] {
   ];
 }
 
-export function tertiaryClasses(status: Status): ClassValue[] {
+export function tertiaryClasses(status: Status): c.Value[] {
   return [
     'text-gray-600',
     'font-medium',
@@ -78,7 +84,7 @@ export function Deactivate({ onClick }: { onClick: () => void }): JSX.Element {
 
 function makeButton(
   { status, className, title, children, onClick, type = 'button' }: SubmitButtonParams,
-  getClasses: (status: Status) => ClassValue[]
+  getClasses: (status: Status) => c.Value[]
 ) {
   const cl = c(getClasses(status || 'Normal'), className);
   return (
@@ -88,7 +94,7 @@ function makeButton(
   );
 }
 
-function makeLinkedButton(p: LinkParams, getClasses: (status: Status) => ClassValue[]) {
+function makeLinkedButton(p: LinkParams, getClasses: (status: Status) => c.Value[]) {
   const cl = c(getClasses(p.status || 'Normal'), p.className);
   return (
     <Link to={p.to} className={c(baseClasses, cl)}>

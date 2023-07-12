@@ -1,3 +1,4 @@
+import React from 'react';
 import c from 'classnames';
 import { useFormContext, Validate } from 'react-hook-form';
 
@@ -22,7 +23,7 @@ export function ShortText({
   description,
   errorMsg = 'This field is required',
   validate,
-}: QuestionProps & { validate?: Validate | Record<string, Validate> | undefined }): JSX.Element {
+}: QuestionProps & { validate?: Validate<string,unknown> | Record<string, Validate<string,unknown>> | undefined }): JSX.Element {
   const required = !optional && errorMsg;
   const { state, values } = useFieldContext();
   if (state === 'edit') {
@@ -78,17 +79,16 @@ function ShortTextField({
   validate,
 }: FieldProps & {
   defaultValue: string;
-  validate: Validate | Record<string, Validate> | undefined;
+  validate: Validate<string,unknown> | Record<string, Validate<string,unknown>> | undefined;
 }) {
-  const { register, errors } = useFormContext();
+  const { register, formState:{errors} } = useFormContext();
 
   return (
     <div>
       <Question required={required}>{question}</Question>
       <ShortTextInput
         errors={errors}
-        name={name}
-        reg={register({ ...reqRule(required), validate })}
+        {...register(name, { ...reqRule(required), validate })}
         defaultValue={defaultValue}
       />
       <Description>{description}</Description>
@@ -100,7 +100,6 @@ export function ShortTextInput({
   name,
   errors,
   className,
-  reg,
   ...props
 }: InputProps<'input'>): JSX.Element {
   const err = errors && name && errors[name]?.message;
@@ -115,7 +114,6 @@ export function ShortTextInput({
           err && errorClasses,
           !props.disabled && !err && normalClasses
         )}
-        ref={reg}
         {...props}
       />
       <ErrorMessage error={err} />
@@ -182,14 +180,13 @@ function LongTextField({
   defaultValue,
   description,
 }: FieldProps & { defaultValue: string }) {
-  const { register, errors } = useFormContext();
+  const { register, formState:{errors} } = useFormContext();
   return (
     <div>
       <Question required={required}>{question}</Question>
       <LongTextInput
-        name={name}
         errors={errors}
-        reg={register(reqRule(required))}
+        {...register(name, reqRule(required))}
         defaultValue={defaultValue}
       />
       <Description>{description}</Description>
@@ -202,7 +199,6 @@ export function LongTextInput({
   className,
   style,
   errors,
-  reg,
   ...props
 }: InputProps<'textarea'>): JSX.Element {
   const err = errors && name && errors[name]?.message;
@@ -217,7 +213,6 @@ export function LongTextInput({
           err && errorClasses,
           !props.disabled && !err && normalClasses
         )}
-        ref={reg}
         {...props}
         style={{ ...style, minHeight: '7rem' }}
       />
@@ -277,7 +272,7 @@ function NumberField({
   required = false,
   defaultValue,
 }: FieldProps & { defaultValue: string }) {
-  const { register, errors } = useFormContext();
+  const { register, formState:{errors} } = useFormContext();
 
   return (
     <div>
@@ -286,8 +281,7 @@ function NumberField({
       </Question>
       <NumberInput
         errors={errors}
-        name={name}
-        reg={register({ ...reqRule(required) })}
+        {...register(name,{ ...reqRule(required) })}
         defaultValue={defaultValue}
       />
     </div>
@@ -298,7 +292,6 @@ export function NumberInput({
   name,
   errors,
   className,
-  reg,
   ...props
 }: InputProps<'input'>): JSX.Element {
   return (
@@ -306,7 +299,6 @@ export function NumberInput({
       name={name}
       errors={errors}
       className={className}
-      reg={reg}
       type="number"
       step="any"
       {...props}

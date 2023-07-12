@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 
@@ -15,7 +15,7 @@ export function PasswordResetInitPageWithEmail(): JSX.Element {
 }
 
 export function PasswordResetInitPage({ email }: { email?: string | undefined }): JSX.Element {
-  const { errors, register, handleSubmit } = useForm<{ email: string }>({
+  const { formState:{errors}, register, handleSubmit } = useForm<{ email: string }>({
     defaultValues: { email },
   });
 
@@ -43,10 +43,9 @@ export function PasswordResetInitPage({ email }: { email?: string | undefined })
           <div>
             <Question required>Email address associated with your account</Question>
             <ShortTextInput
-              name="email"
               autoComplete="username"
               errors={errors}
-              reg={register(reqRule())}
+              {...register("email", reqRule())}
             />
           </div>
           <PrimaryWithNetwork
@@ -64,7 +63,7 @@ export function PasswordResetInitPage({ email }: { email?: string | undefined })
 
 export function PasswordResetPage(): JSX.Element {
   const { email, token } = useParams();
-  const { errors, register, handleSubmit, watch } = useForm<{
+  const { formState:{errors}, register, handleSubmit, watch } = useForm<{
     password: string;
     passwordCheck: string;
   }>({
@@ -89,10 +88,9 @@ export function PasswordResetPage(): JSX.Element {
           <div>
             <Question required>Please enter your new password</Question>
             <ShortTextInput
-              name="password"
               type="password"
               errors={errors}
-              reg={register({
+              {...register("password", {
                 ...reqRule(),
                 validate: val =>
                   val.length > 8 || 'The password needs to have at least 8 characters',
@@ -102,10 +100,9 @@ export function PasswordResetPage(): JSX.Element {
           <div>
             <Question required>Please repeat the password</Question>
             <ShortTextInput
-              name="passwordCheck"
               type="password"
               errors={errors}
-              reg={register({
+              {...register("passwordCheck", {
                 ...reqRule(),
                 validate: val => val === pwd || "The passwords don't match",
               })}

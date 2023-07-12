@@ -1,5 +1,5 @@
 import { asUploadButton } from '@rpldy/upload-button';
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import * as Icon from 'react-feather';
 
 import { apiBase } from '../../../Utils/ApiBase';
@@ -8,7 +8,7 @@ import { FileInfo } from '../../../Utils/File';
 import { Secondary } from '../../Buttons';
 
 export const UploadButton = asUploadButton(
-  forwardRef((props, ref) => (
+  forwardRef<HTMLDivElement>((props, ref) => (
     <div ref={ref} {...props} className="cursor-pointer ">
       <p className="text-sm text-gray-500 hover:text-gray-700">Add more files</p>
     </div>
@@ -16,7 +16,7 @@ export const UploadButton = asUploadButton(
 );
 
 export const UploadButton2 = asUploadButton(
-  forwardRef((props, ref) => (
+  forwardRef<HTMLDivElement>((props, ref) => (
     <div ref={ref} {...props}>
       <Secondary
         title="Choose files"

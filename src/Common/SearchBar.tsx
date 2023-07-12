@@ -19,8 +19,7 @@ export function SearchBar({
       <div className="flex flex-row items-stretch w-full justify-between space-x-4">
         <div className="flex-grow">
           <ShortTextInput
-            name="query"
-            reg={register}
+            {...register("query")}
             className={c('pl-8', 'border-none bg-white shadow-none rounded-lg', normalClasses)}
           />
           <Search

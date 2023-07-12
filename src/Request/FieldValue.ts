@@ -79,5 +79,6 @@ function groupFiles(props: PropertyJSON[]): PropertyJSON[] {
 }
 
 export function getDefaultValues(properties: PropertyJSON[]): Record<string, string> {
-  return groupFiles(properties).reduce((acc, p) => ({ ...acc, [p.name]: p.value }), {});
+  //return groupFiles(properties).reduce((acc, p) => ({ ...acc, [p.name]: p.value }), {});
+  return Object.fromEntries(groupFiles(properties).map(p => [p.name, p.value]))
 }

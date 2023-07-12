@@ -44,11 +44,11 @@ type RegistrationUser = {
 export function RegisterPage(): JSX.Element {
   const { email, token } = useParams();
   const [regState, setState] = useState<RegState>({ state: 'init' });
-  const { register, errors, watch, handleSubmit } = useForm<RegistrationField>();
+  const { register, formState:{errors}, watch, handleSubmit } = useForm<RegistrationField>();
 
   const pwd = watch('password');
 
-  return (
+  return (email && token) ?(
     <CenteredPage
       title="Register a new account"
       subtitle="Now, just write down some more details and you're done! Please note that your account needs to be manually asigned to a team by one of our administrators."
@@ -56,7 +56,7 @@ export function RegisterPage(): JSX.Element {
       imageAlt="A user icon"
     >
       <form
-        onSubmit={handleSubmit(async ({ name, password, room, telephone }: RegistrationStub) => {
+        onSubmit={handleSubmit(async ({ name, password, room, telephone }: RegistrationField) => {
           setState({ state: 'loading' });
 
           const r = await post<RegistrationUser>(`/register`, {
@@ -91,10 +91,9 @@ export function RegisterPage(): JSX.Element {
               <div>
                 <Question required>Display name</Question>
                 <ShortTextInput
-                  name="name"
                   autoComplete="name"
                   placeholder="Arthur Dent"
-                  reg={register({
+                  {...register("name", {
                     ...reqRule(),
                     validate: val =>
                       val.length > 3 ||
@@ -107,9 +106,8 @@ export function RegisterPage(): JSX.Element {
               <div>
                 <Question required>Telephone number</Question>
                 <ShortTextInput
-                  name="telephone"
                   placeholder="163"
-                  reg={register(reqRule())}
+                  {...register("telephone", reqRule())}
                   errors={errors}
                 />
                 <Description>
@@ -119,9 +117,8 @@ export function RegisterPage(): JSX.Element {
               <div>
                 <Question required>Where can we find you?</Question>
                 <ShortTextInput
-                  name="room"
                   placeholder="A 1.89"
-                  reg={register(
+                  {...register("room", 
                     reqRule('We need this information in case we need to contact you personally')
                   )}
                   errors={errors}
@@ -137,10 +134,9 @@ export function RegisterPage(): JSX.Element {
               <div>
                 <Question required>Your password</Question>
                 <ShortTextInput
-                  name="password"
                   type="password"
                   autoComplete="new-password"
-                  reg={register({
+                  {...register("password", {
                     ...reqRule(),
                     validate: val =>
                       val.length > 8 || 'The password needs to have at least 8 characters',
@@ -151,10 +147,9 @@ export function RegisterPage(): JSX.Element {
               <div>
                 <Question required>Enter the password again</Question>
                 <ShortTextInput
-                  name="passwordCheck"
                   type="password"
                   autoComplete="new-password"
-                  reg={register({
+                  {...register("passwordCheck", {
                     ...reqRule(),
                     validate: val => val === pwd || "The passwords don't match",
                   })}
@@ -176,5 +171,5 @@ export function RegisterPage(): JSX.Element {
         </CenteredForm>
       </form>
     </CenteredPage>
-  );
+  ) : <p>Bad registration</p>;
 }

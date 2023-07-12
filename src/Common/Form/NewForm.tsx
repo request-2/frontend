@@ -1,5 +1,5 @@
 import Uploady from '@rpldy/uploady';
-import { ReactNode, useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { AlertTriangle } from 'react-feather';
 import { FormProvider, useForm } from 'react-hook-form';
 

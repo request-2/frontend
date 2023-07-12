@@ -24,7 +24,7 @@ export function TeamForm({
   headerButtons?: React.ReactNode;
 }): JSX.Element {
   const navigate = useNavigate();
-  const { register, errors, handleSubmit } = useForm<TeamStub>({
+  const { register, formState:{errors}, handleSubmit } = useForm<TeamStub>({
     defaultValues: {
       name: team?.name ?? '',
       code: team?.code ?? '',
@@ -54,11 +54,11 @@ export function TeamForm({
               <div className="p-6 space-y-6 w-full">
                 <div>
                   <Question required>Team leader</Question>
-                  <ShortTextInput name="name" errors={errors} reg={register(reqRule())} />
+                  <ShortTextInput errors={errors} {...register("name", reqRule())} />
                 </div>
                 <div>
                   <Question required>Institutional code</Question>
-                  <ShortTextInput name="code" errors={errors} reg={register(reqRule())} />
+                  <ShortTextInput errors={errors} {...register("code", reqRule())} />
                 </div>
               </div>
               <div className="flex justify-end w-full px-6 py-3 bg-gray-50">{children}</div>

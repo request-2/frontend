@@ -1,3 +1,4 @@
+import React from 'react';
 import { To } from 'history';
 import moment from 'moment';
 import { Copy, Info, Plus } from 'react-feather';

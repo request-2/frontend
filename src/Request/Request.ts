@@ -40,7 +40,7 @@ export type New<T> = Omit<
 
 // DON'T CHANGE THIS UNLESS YOU CHANGE Api.Query.Request AS WELL
 export function idToCode(id: number): string {
-  const table = [...'123456789ABCDEFGHIJKLMNPQRSTUVWXYZ'.split('')];
+  const table = [...'123456789ABCDEFGHIJKLMNPQRSTUVWXYZ'];
   const k = table.length;
 
   function helper([dgs, rst]: [number[], number], n: number): [number[], number] {

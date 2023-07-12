@@ -2,7 +2,7 @@
 import UploadDropZone from '@rpldy/upload-drop-zone';
 import { useItemFinishListener, useItemStartListener } from '@rpldy/uploady';
 import c from 'classnames';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
 
 import { FileInfo, stringToFileInfo } from '../../../Utils/File';
@@ -30,14 +30,14 @@ export function FileInput({
   name,
   required = false,
   value = [],
-  errors,
+  formState:{errors},
   register,
   setValue,
   unregister,
   defaultValue,
 }: {
   register: Function;
-  errors: FormErrors;
+  formState: {errors: FormErrors};
   defaultValue: Maybe<string>;
   value?: Maybe<FileInfo[]>;
   setValue: Function;

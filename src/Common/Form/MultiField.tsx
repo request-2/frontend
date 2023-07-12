@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { NumberInput, ShortText, ShortTextInput } from './NewTextField';
@@ -83,7 +83,7 @@ function MultiFieldField({
   defaultValue,
   description,
 }: FieldProps & { children: (id: number) => ReactNode; defaultValue: number }) {
-  const { watch, errors, register } = useFormContext();
+  const { watch, formState:{errors}, register } = useFormContext();
   const maybeCount = Number.parseInt(watch(name, defaultValue));
   const count = Number.isNaN(maybeCount) ? 0 : maybeCount;
 
@@ -95,9 +95,8 @@ function MultiFieldField({
         </Question>
         <ShortTextInput
           defaultValue={defaultValue}
-          name={name}
           errors={errors}
-          reg={register({
+          {...register(name, {
             required,
             validate: val => {
               const n = Number.parseInt(val);

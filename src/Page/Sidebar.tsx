@@ -1,7 +1,7 @@
 import '../styles/index.css';
 
 import c from 'classnames';
-import { ReactNode, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { AtomSpinner } from 'react-epic-spinners';
 import * as Icon from 'react-feather';
 import { useForm } from 'react-hook-form';
@@ -140,9 +140,8 @@ function FeedbackButton() {
             })}
           >
             <LongTextInput
-              name="content"
               placeholder="I noticed that..."
-              reg={form.register()}
+              {...form.register("content")}
               className="mb-2"
             />
             <div className="flex flex-row justify-between">

@@ -2,8 +2,8 @@
 import c from 'classnames';
 import React, { Fragment, ReactElement, ReactNode } from 'react';
 import * as Icon from 'react-feather';
-import { Control, Controller, useFormContext } from 'react-hook-form';
-import Select, { components } from 'react-select/';
+import { Control, Controller, useFormContext, FieldPath, FieldValues, PathValue } from 'react-hook-form';
+import Select, { components, StylesConfig } from 'react-select/';
 import Creatable from 'react-select/creatable';
 
 import { Selection } from '../../Request/Request';
@@ -143,7 +143,7 @@ export function MultipleChoiceField({
   children: Choice[];
   defaultValue: Selection[];
 }): JSX.Element {
-  const { watch, errors, control } = useFormContext();
+  const { watch, formState:{errors}, control } = useFormContext();
 
   return (
     <div>
@@ -189,7 +189,7 @@ function MenuList({ text, emptyText, children, ...rest }: any) {
   );
 }
 
-export function MultipleChoiceInput({
+export function MultipleChoiceInput<FS extends FieldValues>({
   name,
   children,
   required = false,
@@ -199,15 +199,15 @@ export function MultipleChoiceInput({
   control,
   defaultValue = [],
 }: {
-  name: string;
+  name: FieldPath<FS>;
   value?: Maybe<Selection[]>;
   children: Choice[];
   hasCustom?: boolean;
   errors: FormErrors;
-  defaultValue?: Selection[];
+  defaultValue?: PathValue<FS, Path<FS>>;
   required?: string | boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<Record<string, any>>;
+  control: Control<FS>;
 }): JSX.Element {
   const err = errors[name]?.message;
   const options = children.map(ch => ({
@@ -215,7 +215,7 @@ export function MultipleChoiceInput({
     value: ch.props.value,
   }));
 
-  console.log('FIELD', name, value);
+  //console.log('FIELD', name, value);
 
   return (
     <div>
@@ -395,7 +395,7 @@ export function SingleChoiceField({
   defaultValue,
   keepOptionOrder = false,
 }: FieldProps & ChoiceProps & { defaultValue: string; keepOptionOrder: boolean }): JSX.Element {
-  const { watch, errors, register, control } = useFormContext();
+  const { watch, formState:{errors}, register, control } = useFormContext();
   const value = watch(name, defaultValue) as string | Selection | null;
 
   return (
@@ -418,10 +418,9 @@ export function SingleChoiceField({
         </SingleChoiceTextInput>
       ) : (
         <SingleChoiceButtonsInput
-          name={name}
           value={value}
           errors={errors}
-          reg={register(reqRule(required, 'You have to choose an option'))}
+          {...register(name, reqRule(required, 'You have to choose an option'))}
           defaultValue={defaultValue}
           keepOptionOrder={keepOptionOrder}
         >
@@ -438,7 +437,6 @@ function SingleChoiceButtonsInput({
   required = false,
   value,
   errors,
-  reg,
   defaultValue,
   keepOptionOrder,
   ...props
@@ -455,7 +453,6 @@ function SingleChoiceButtonsInput({
           <ChoiceField>
             <input
               name={name}
-              ref={reg}
               id={`${name}/${value}`}
               value={value}
               type="radio"
@@ -510,7 +507,7 @@ function SingleChoiceTextInput({
   required?: string | boolean;
   keepOptionOrder: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<Record<string, any>>;
+  control: Control;
 }) {
   const err = errors[name]?.message;
   const choice = children.find(ch => ch.props.value === defaultValue);
@@ -679,11 +676,10 @@ function getVisibleChildren(
   ) : null;
 }
 
-function getStyles(err: Maybe<string>) {
+function getStyles(err: Maybe<string>):StylesConfig {
   return {
-    control: (provided: Object, state: { isFocused: boolean }) => ({
+    control: (provided, state: { isFocused: boolean }) => ({
       ...provided,
-      boxShadow: undefined,
       border: undefined,
       borderRadius: undefined,
       borderWidth: undefined,
@@ -719,15 +715,15 @@ function getStyles(err: Maybe<string>) {
           }),
       transition: undefined,
     }),
-    singleValue: (provided: Object) => ({ ...provided, color: undefined }),
-    valueContainer: (provided: Object) => ({ ...provided, padding: undefined }),
-    multiValue: (provided: Object) => ({
+    singleValue: (provided) => ({ ...provided, color: undefined }),
+    valueContainer: (provided) => ({ ...provided, padding: undefined }),
+    multiValue: (provided) => ({
       ...provided,
       borderRadius: undefined,
       backgroundColor: undefined,
       borderWidth: undefined,
     }),
-    multiValueLabel: (provided: Object) => ({
+    multiValueLabel: (provided) => ({
       ...provided,
       color: undefined,
       borderRadius: undefined,
@@ -735,7 +731,7 @@ function getStyles(err: Maybe<string>) {
       padding: undefined,
       paddingLeft: undefined,
     }),
-    multiValueRemove: (provided: Object) => ({
+    multiValueRemove: (provided) => ({
       ...provided,
       borderRadius: undefined,
       paddingLeft: undefined,

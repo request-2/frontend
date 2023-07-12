@@ -17,10 +17,12 @@ import { requests } from './RequestTypes/RequestTypes';
 // TODO Check that the field names are unique
 export function NewRequestPage(): JSX.Element {
   const { requestType } = useParams();
-  const name = requests.get(requestType)?.titleText;
 
-  if (name) {
-    return <BaseRequestPage name={name} defaultValues={{}} requestType={requestType} />;
+  if (requestType) {
+    const name = requests.get(requestType)?.titleText;
+    if (name) {
+      return <BaseRequestPage name={name} defaultValues={{}} requestType={requestType} />;
+    }
   }
 
   return <Page title="Error">This request type is invalid</Page>;

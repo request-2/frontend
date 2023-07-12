@@ -85,10 +85,9 @@ function CommentComposer({ requestId, refresh }: { requestId: number; refresh: (
     >
       <div className="p-6">
         <LongTextInput
-          name="comment"
           placeholder="Enter your comment here..."
-          errors={form.errors}
-          reg={form.register({ required: 'You have to enter something to submit it' })}
+          errors={form.formState.errors}
+          {...form.register("comment", { required: 'You have to enter something to submit it' })}
         />
       </div>
       <div className="bg-gray-50 px-6 py-4 flex flex-row-reverse">

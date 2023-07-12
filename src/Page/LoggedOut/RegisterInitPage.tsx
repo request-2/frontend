@@ -13,7 +13,7 @@ type RegState = { state: 'init' | 'loading' | 'success' } | { state: 'problem'; 
 
 export function RegisterInitPage(): JSX.Element {
   const [regState, setState] = useState<RegState>({ state: 'init' });
-  const { register, errors, handleSubmit } = useForm<{ email: string }>({
+  const { register, formState:{errors}, handleSubmit } = useForm<{ email: string }>({
     defaultValues: { email: '' },
   });
 
@@ -51,10 +51,9 @@ export function RegisterInitPage(): JSX.Element {
               <div>
                 <Question required>E-mail address</Question>
                 <ShortTextInput
-                  name="email"
                   autoComplete="work email"
                   errors={errors}
-                  reg={register(reqRule())}
+                  {...register("email", reqRule())}
                 />
               </div>
               {regState.state === 'loading' ? (
